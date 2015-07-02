@@ -1326,8 +1326,8 @@ interface Options {
 
       var popup = self.find('.popup .popup-info');
 
-      var popupOffsetTop = self.offset().top,
-          popupOffsetLeft = self.offset().left;
+      var popupOffsetTop = self.offset().top - $(window).scrollTop(),
+          popupOffsetLeft = self.offset().left - $(window).scrollLeft();;
 
 
       var cloned = $(self).clone();
