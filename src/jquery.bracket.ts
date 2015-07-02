@@ -1270,6 +1270,7 @@ interface Options {
     var height = data.teams.length * matchBoxHeight
 
     wEl.css('height', height)
+    wEl.parent().css('height', height)
 
     // reserve space for consolation round
     if (isSingleElimination && data.teams.length <= 2 && !opts.skipConsolationRound) {
