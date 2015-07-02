@@ -53,9 +53,12 @@ var Bracket = (function() {
         // Results from the finals
         [
           [2, 1, '6/5, 5/6, 7/6', '6/4, 3/6, 6/0', { date: "Date here 2", club: "Club", info: "Additional info" }],
-          [2, 1, '6/5, 5/6, 7/6', '6/4, 3/6, 6/0', { date: "Date here 2", club: "Club", info: "Additional info" }],
         ]
       ],
+      // Winner details here
+      "winner": {
+        result: "Result from the final",
+      },
       // Names of the rounds
       "roundsNames": [
         'Първи кръг (1/8)',
@@ -76,7 +79,8 @@ var Bracket = (function() {
   var initWithData = function(data) {
 
     graphContainer.bracket({
-      init: data
+      init: data,
+      skipConsolationRound: true,
     });
  
   };

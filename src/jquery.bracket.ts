@@ -40,6 +40,7 @@ interface Match {
   el: JQuery;
   id: number;
   round: any;
+  finalResults: any;
   connectorCb: (cb: ConnectorProvider) => void;
   connect: (cb: ConnectorProvider) => void;
   winner: () => TeamBlock;
@@ -266,24 +267,37 @@ interface Options {
     // var loser = el.find('.team.lose')
     // loser.append('<div class="bubble">2nd</div>')
 
-    var winnerName = winner.find('.name').text();
+    var winnerName = winner.find('.name').text(),
+        winnerResult = match.finalResults.result;
 
     var matchResultElement = $('<div class="match">' +
       '<div class="teamContainer win">' +
         '<div class="team">' +
           '<div class="label">' +
-            '<span class="title">Победител</span><br />'+
-            '<span class="name">winnerName</span>'+
-            '<span class="result">Result</span>' +
+            '<span class="title">Победител:</span><br />'+
+            '<span class="name">' + winnerName + '</span>'+
+            '<span class="result">' + winnerResult + '</span>' +
           '</div>' +
          '</div>' +
       '</div>' +
     '</div>');
+
+    var matchWinner = winner.parents('.teamContainer');
+    var matchWinnerTopOffset = parseInt(matchWinner.css('top'));
+
     matchResultElement.find('.teamContainer').css({
       position: 'absolute',
-      bottom: -120
+      top: (matchWinnerTopOffset + 110 ) + 'px'
     });
-    winner.parents('.round').find('.match:first').after(matchResultElement);
+
+    var connector = $('<div class="connector"></div>');
+    connector.css({
+      top: matchWinnerTopOffset + matchWinner.height() + 2 + 'px',
+      height: "10px",
+      left: (matchWinner.width() / 2) + 'px',
+    });
+    winner.parents('.round').find('.match:first').append(connector);
+    winner.parents('.round').find('.match:first').append(matchResultElement);
 
     return true
   }
@@ -294,14 +308,14 @@ interface Options {
     // winner.append('<div class="bubble third">3rd</div>')
     // var loser = el.find('.team.lose')
     // loser.append('<div class="bubble fourth">4th</div>')
-     
+
     var offset = parseInt(el.find('.teamContainer').css('top'));
     el.find('.teamContainer').css('top', offset + 50 + 'px');
     
     return true
   }
 
-  function prepareWinners(winners: Bracket, teams, isSingleElimination: boolean, skipConsolationRound: boolean) {
+  function prepareWinners(winners: Bracket, teams, isSingleElimination: boolean, skipConsolationRound: boolean, winnerDetails: any) {
     var rounds = Math.log(teams.length * 2) / Math.log(2);
     var matches = teams.length;
     var round
@@ -332,6 +346,7 @@ interface Options {
         }
         else {
           var match = round.addMatch(teamCb, winnerBubbles)
+          match.finalResults = winnerDetails
           match.setAlignCb(function(tC) {
             tC.css('top', '');
             tC.css('position', 'absolute');
@@ -451,7 +466,7 @@ interface Options {
   }
 
   function prepareFinals(finals: Bracket, winners: Bracket, losers: Bracket,
-                         skipSecondaryFinal: boolean, skipConsolationRound: boolean, topCon: JQuery) {
+                         skipSecondaryFinal: boolean, skipConsolationRound: boolean,  winnerDetails: any, topCon: JQuery) {
     var round = finals.addRound()
     var match = round.addMatch(function() {
         return [
@@ -1024,6 +1039,7 @@ interface Options {
       return {
         el: matchCon,
         id: idx,
+        finalResults: null,
         round: function(): Round {
           return round
         },
@@ -1274,11 +1290,12 @@ interface Options {
       f = mkBracket(fEl, !r || !r[2] ? null : r[2], mkMatch, roundsNames)
     }
 
-    prepareWinners(w, data.teams, isSingleElimination, opts.skipConsolationRound)
+    prepareWinners(w, data.teams, isSingleElimination, opts.skipConsolationRound, data.winner)
+
 
     if (!isSingleElimination) {
       prepareLosers(w, l, data.teams.length);
-      prepareFinals(f, w, l, opts.skipSecondaryFinal, opts.skipConsolationRound, topCon);
+      prepareFinals(f, w, l, opts.skipSecondaryFinal, opts.skipConsolationRound, data.winner, topCon);
     }
 
     renderAll(false)
