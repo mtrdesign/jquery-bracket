@@ -231,7 +231,14 @@ interface Options {
       return;
     }
 
-    var name = (team['name'].length > 16) ? team['name'].substring(0, 16) + '...' : team['name'];
+    var name, maxsymbols
+    if (round === 0) {
+      maxsymbols = team['type'] ? 18 : 23
+      name = (team['name'].length > maxsymbols) ? team['name'].substring(0, maxsymbols) + '...' : team['name'];  
+    }
+    else {
+      name = (team['name'].length > 24) ? team['name'].substring(0, 24) + '...' : team['name'];   
+    }
     
 
     var nameElement = '<span class="name">'+ name +'</span>';
@@ -274,8 +281,8 @@ interface Options {
       '<div class="teamContainer win">' +
         '<div class="team">' +
           '<div class="label">' +
-            '<span class="title">Победител:</span><br />'+
-            '<span class="name">' + winnerName + '</span>'+
+            '<span class="title">Победител:</span>'+
+            '<span class="name clear">' + winnerName + '</span>'+
             '<span class="result">' + winnerResult + '</span>' +
           '</div>' +
          '</div>' +
@@ -287,13 +294,13 @@ interface Options {
 
     matchResultElement.find('.teamContainer').css({
       position: 'absolute',
-      top: (matchWinnerTopOffset + 110 ) + 'px'
+      top: (matchWinnerTopOffset + 125 ) + 'px'
     });
 
     var connector = $('<div class="connector"></div>');
     connector.css({
       top: matchWinnerTopOffset + matchWinner.height() + 2 + 'px',
-      height: "10px",
+      height: "20px",
       left: (matchWinner.width() / 2) + 'px',
     });
     winner.parents('.round').find('.match:first').append(connector);
@@ -659,18 +666,19 @@ interface Options {
           ma.render()
         })
 
-        // Add a round anchor
-        var roundAnchor = $('<div class="anchor">'+roundName+'</div>');
-        roundAnchor.attr('id', 'round-'+roundIdx);
+        // Add a round-label
+        var roundLabel = $('<div class="round-label">'+roundName+'</div>');
+        roundLabel.attr('id', 'round-'+roundIdx);
         var firstMatch = roundCon.find('.match:first .teamContainer');
-        
-        if (firstMatch.css('top') != 'auto' && firstMatch.css('bottom') == 'auto') {
-          roundAnchor.css('top', parseInt(firstMatch.css('top')) - 60)
-          roundCon.prepend(roundAnchor);
+
+        //if (firstMatch.css('top') != 'auto' && firstMatch.css('bottom') == 'auto') {
+        if (firstMatch.css('top') != 'auto') {
+          roundLabel.css('top', parseInt(firstMatch.css('top')) - 35)
+          roundCon.prepend(roundLabel);
         }
         else {
-          roundAnchor.css('bottom', 50)
-          firstMatch.before(roundAnchor);
+          roundLabel.css('bottom', 50)
+          firstMatch.before(roundLabel);
         }
         
       },
@@ -1307,6 +1315,50 @@ interface Options {
     }
   }
 
+  var actions = function() {
+    $(document).on('mouseenter', '.popup-activator', function() {
+      var self = $(this);
+
+      if ($('.cloned-popup').size()) {
+        //$('.cloned-popup').remove();
+        return;
+      }
+
+      var popup = self.find('.popup .popup-info');
+
+      var popupOffsetTop = self.offset().top,
+          popupOffsetLeft = self.offset().left;
+
+
+      var cloned = $(self).clone();
+
+      cloned.css({
+        position: 'fixed',
+        top: popupOffsetTop,
+        left: popupOffsetLeft + self.parent().width(),
+        zIndex: 10000
+      });
+      cloned.find('.corner').show();
+      cloned.find('.popup').show();
+      cloned.find('.popup-info').show();
+
+      cloned.addClass('cloned-popup');
+
+      $('body').append(cloned);
+    });
+
+    $(document).on('mouseleave', '.match, .popup-activator, .popup-activator .corner, .cloned-popup .popup-info', function(e) {
+      var self = $(this);
+      var popup = self.parents('.popup-activator');
+
+      if ($(e.target).hasClass('corner')) {
+        return;
+      }
+
+      $('.cloned-popup').remove();
+    });
+  };
+
   var methods = {
     init: function(opts: Options) {
       var that = this
@@ -1321,6 +1373,8 @@ interface Options {
         $.error('Direction must be either: "lr" or "rl"')
       var bracket = JqueryBracket(opts)
       $(this).data('bracket', {target: that, obj: bracket})
+
+      actions()
 
       return bracket
     },
