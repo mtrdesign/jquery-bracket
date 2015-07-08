@@ -239,8 +239,11 @@ interface Options {
     else {
       name = (team['name'].length > 24) ? team['name'].substring(0, 24) + '...' : team['name'];   
     }
-    
 
+    if (team['profile_url']) {
+      name = '<a href="' + team['profile_url'] + '" target="_blank">' + name + '</a>'
+    }
+    
     var nameElement = '<span class="name">'+ name +'</span>';
     if (round === 0) {
       var numberElement = '<span class="number">'+ team['number'] +'</span>';
@@ -1147,7 +1150,7 @@ interface Options {
             var popupElement = $('<div class="popup">'+
               '<div class="popup-info">' +
                 '<div class="date">'+ match.popupDetails.date +'</div>' +
-                '<div class="club"><a href="">'+ match.popupDetails.club +'</a></div>' +
+                '<div class="club"><a href="' + match.popupDetails.club_url + '" target="_blank">'+ match.popupDetails.club +'</a></div>' +
                 '<div class="info">'+ match.popupDetails.info +'</div>' +
               '</div>' +
             '</div>');
@@ -1270,6 +1273,8 @@ interface Options {
     var height = data.teams.length * matchBoxHeight
 
     wEl.css('height', height)
+    wEl.parent().css('height', height)
+    wEl.parent().parent().css('height', (height + parseInt(wEl.parent().css('top'))))
 
     // reserve space for consolation round
     if (isSingleElimination && data.teams.length <= 2 && !opts.skipConsolationRound) {
