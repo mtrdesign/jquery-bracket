@@ -9,8 +9,8 @@
 
 /// <reference path="../lib/jquery.d.ts" />
 
-var matchBoxWidthFirstRound = 180
-var matchBoxWidth = 180
+var matchBoxWidthFirstRound = 200
+var matchBoxWidth = 155
 var matchBoxHeight = 80
 
 interface Connector {
@@ -233,11 +233,11 @@ interface Options {
 
     var name, maxsymbols
     if (round === 0) {
-      maxsymbols = team['type'] ? 18 : 23
+      maxsymbols = team['type'] ? 17 : 22
       name = (team['name'].length > maxsymbols) ? team['name'].substring(0, maxsymbols) + '...' : team['name'];  
     }
     else {
-      name = (team['name'].length > 24) ? team['name'].substring(0, 24) + '...' : team['name'];   
+      name = (team['name'].length > 23) ? team['name'].substring(0, 23) + '...' : team['name'];   
     }
 
     if (team['profile_url']) {
@@ -284,7 +284,7 @@ interface Options {
       '<div class="teamContainer win">' +
         '<div class="team">' +
           '<div class="label">' +
-            '<span class="title">Победител:</span>'+
+            '<span class="title">'+ match.finalResults.text +':</span>'+
             '<span class="name clear">' + winnerName + '</span>'+
             '<span class="result">' + winnerResult + '</span>' +
           '</div>' +
@@ -303,7 +303,7 @@ interface Options {
     var connector = $('<div class="connector"></div>');
     connector.css({
       top: matchWinnerTopOffset + matchWinner.height() + 2 + 'px',
-      height: "20px",
+      height: "26px",
       left: (matchWinner.width() / 2) + 'px',
     });
     winner.parents('.round').find('.match:first').append(connector);
@@ -1292,9 +1292,9 @@ interface Options {
       rounds = (Math.log(data.teams.length * 2) / Math.log(2) - 1) * 2 + 1
 
     if (opts.save)
-      topCon.css('width', rounds * matchBoxWidth + 40)
+      topCon.css('width', rounds * matchBoxWidth)
     else
-      topCon.css('width', rounds * matchBoxWidth + 10)
+      topCon.css('width', (rounds-1) * matchBoxWidth + matchBoxWidthFirstRound - 10)
 
     w = mkBracket(wEl, !r || !r[0] ? null : r[0], mkMatch, roundsNames)
 
@@ -1321,6 +1321,7 @@ interface Options {
   }
 
   var actions = function() {
+
     $(document).on('mouseenter', '.popup-activator', function() {
       var self = $(this);
 
@@ -1331,14 +1332,21 @@ interface Options {
 
       var popup = self.find('.popup .popup-info');
 
-      var popupOffsetTop = self.offset().top - $(window).scrollTop(),
-          popupOffsetLeft = self.offset().left - $(window).scrollLeft();;
+      /*
+      var popupPosition = 'absolute',
+          popupOffsetTop = self.offset().top - $(window).scrollTop(),
+          popupOffsetLeft = self.offset().left - $(window).scrollLeft();
+      */
+
+      var popupPosition = 'absolute',
+          popupOffsetTop = self.offset().top,
+          popupOffsetLeft = self.offset().left;
 
 
       var cloned = $(self).clone();
 
       cloned.css({
-        position: 'fixed',
+        position: popupPosition,
         top: popupOffsetTop,
         left: popupOffsetLeft + self.parent().width(),
         zIndex: 10000

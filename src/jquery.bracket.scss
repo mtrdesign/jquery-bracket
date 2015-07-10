@@ -27,12 +27,13 @@ $popupColor: #eef7fb;
 $boxHeight: 46px;
 $boxPadding: 10px;
 
-$teamBoxWidth: 135px;
+$teamBoxWidth: 134px;
 $teamBoxHeight: $boxHeight;
-$teamBoxBorderRadius: 8px;
+$teamBoxBorderRadius: 5px;
 
-$teamBoxWidthFirstRound: 180px;
+$teamBoxWidthFirstRound: 179px;
 $teamBoxPaddingFirstRound: 10px 10px 6px 10px;
+$printColor: #000000;
 
 /**
  * Some mixins here
@@ -179,6 +180,7 @@ div.jQBracket {
     background-color: #ffffff;
     width: $teamBoxWidth;
     cursor: default;
+    line-height: 1;
 
     &:first-child {
       border-bottom: 2px solid #858585;
@@ -197,7 +199,7 @@ div.jQBracket {
       margin: 0;
     }
     div.label {
-      padding: $boxPadding;
+      padding: $boxPadding $boxPadding 7px $boxPadding;
       /* position: absolute; */
       position: relative;
       width: 100%;
@@ -209,6 +211,7 @@ div.jQBracket {
       @include border-radius($teamBoxBorderRadius);
       overflow: visible;
       display: inline-block;
+      font-weight: bold;
 
       &[disabled] {
         cursor: default;
@@ -222,6 +225,7 @@ div.jQBracket {
         margin-right: 2px;
         text-align: center;
         float: left;
+        font-weight: bold;
       }
 
       .number {
@@ -232,7 +236,6 @@ div.jQBracket {
 
       .type {
         width: 24px;
-        font-weight: bold;
       }
 
       .country {
@@ -591,5 +594,28 @@ div.jQBracket.rl {
     top: 0px;
     right: -120px;
     z-index: 10000;
+  }
+}
+
+/*
+ * Print styles because we don't want to lose colors 
+ *
+ * These styles are only changing the color scheme of the elements
+ */
+div.jQBracket.print {
+  .match {
+    .teamContainer {
+      .label {
+        color: $printColor;
+      }
+
+      &.win {
+        border-color: $printColor;
+
+        .label {
+          color: $printColor;
+        }
+      }
+    }
   }
 }
