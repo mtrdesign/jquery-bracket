@@ -1153,11 +1153,16 @@ interface Options {
           // Add popup elements
           if (match.popupDetails) {
             var popupActivatorElement = $('<div class="popup-activator"><div class="corner">+</div></div>')
+
+            var popupDate = match.popupDetails.date || ''
+            var popupClub = match.popupDetails.club || ''
+            var popupInfo = match.popupDetails.info || ''
+
             var popupElement = $('<div class="popup">'+
               '<div class="popup-info">' +
-                '<div class="date">'+ match.popupDetails.date +'</div>' +
-                '<div class="club"><a href="' + match.popupDetails.club_url + '" target="_blank">'+ match.popupDetails.club +'</a></div>' +
-                '<div class="info">'+ match.popupDetails.info +'</div>' +
+                '<div class="date">'+ popupDate +'</div>' +
+                '<div class="club"><a href="' + match.popupDetails.club_url + '" target="_blank">'+ popupClub +'</a></div>' +
+                '<div class="info">'+ popupInfo +'</div>' +
               '</div>' +
             '</div>');
 

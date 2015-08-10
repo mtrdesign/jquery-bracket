@@ -27,7 +27,7 @@ var Bracket = (function() {
       "results": [
         // Results from the 1/8 finals
         [
-          [1, 2, undefined, undefined, { date: "21 Май 2015 - 21:00", club: "O.K. Sport - Club", club_url: 'http://mtr-design.com', info: "Корт 1" }],
+          [1, 2, undefined, undefined, { date: null, club: "O.K. Sport - Club", club_url: 'http://mtr-design.com', info: null }],
           [1, 2, undefined, undefined, { date: "22 Май 2015 - 18:00", club: "Club", club_url: 'http://mtr-design.com', info: "Корт 2" }],
           [1, 2, undefined, undefined, { date: "23 Май 2015 - 20:00", club: "O.K. Sport - Club", club_url: 'http://mtr-design.com', info: "Корт 3" }],
           [1, 2, undefined, undefined, { date: "24 Май 2015 - 21:00", club: "Club", club_url: 'http://mtr-design.com', info: "Корт 4" }],
