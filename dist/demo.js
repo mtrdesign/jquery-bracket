@@ -15,7 +15,7 @@ var Bracket = (function() {
     var singleElimination = {
       "teams": [
         // All of the players in the first round
-        [{name: "Player 1 with a long name", country: 'BUL', number: 1, type: '', profile_url: 'http://mtr-design.com' }, {name: "Player 2", country: 'FRA', number: 2, type: 'Q', profile_url: 'http://mtr-design.com' }],
+        [{name: "Player 1 with a long name", country: null, number: 1, type: '', profile_url: 'http://mtr-design.com' }, {name: "Player 2", country: 'FRA', number: 2, type: null, profile_url: 'http://mtr-design.com' }],
         [{name: "Player 3", country: 'GBR', number: 3, type: '', profile_url: 'http://mtr-design.com'}, {name: "Player 4 with a long name here", country: 'USA', number: 4, type: 'WC', profile_url: 'http://mtr-design.com' }],
         [{name: "Player 5", country: 'GBR', number: 5, type: '', profile_url: 'http://mtr-design.com' }, {name: "Player 6 with a long nam", country: 'USA', number: 6, type: 'W', profile_url: 'http://mtr-design.com' }],
         [{name: "Player 7", country: 'GBR', number: 7, type: '', profile_url: 'http://mtr-design.com' }, {name: "Player 8", country: 'USA', number: 8, type: 'W', profile_url: 'http://mtr-design.com' }],

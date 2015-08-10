@@ -231,9 +231,15 @@ interface Options {
       return;
     }
 
+    team['type'] = team['type'] || ''
+    team['country'] = team['country'] || ''
+
     var name, maxsymbols
     if (round === 0) {
       maxsymbols = team['type'] ? 17 : 22
+      if (team['country'].length === 0) {
+        maxsymbols += 3
+      }
       name = (team['name'].length > maxsymbols) ? team['name'].substring(0, maxsymbols) + '...' : team['name'];  
     }
     else {
@@ -285,7 +291,7 @@ interface Options {
         '<div class="team">' +
           '<div class="label">' +
             '<span class="title">'+ match.finalResults.text +':</span>'+
-            '<span class="name clear">' + winnerName + '</span>'+
+            '<span class="name cleared">' + winnerName + '</span>'+
             '<span class="result">' + winnerResult + '</span>' +
           '</div>' +
          '</div>' +
