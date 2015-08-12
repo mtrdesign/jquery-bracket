@@ -10,6 +10,41 @@ var Bracket = (function() {
 
   };
 
+  var initExample4 = function() {
+
+    var singleElimination = {
+      "teams": [
+        // All of the players in the first round
+        [{name: "Player 1 with a long name", country: null, number: 1, type: '', profile_url: 'http://mtr-design.com' }, {name: "Player 2", country: 'FRA', number: 2, type: null, profile_url: 'http://mtr-design.com' }],
+        [{name: "Player 3", country: 'GBR', number: 3, type: '', profile_url: 'http://mtr-design.com'}, {name: "Player 4 with a long name here", country: 'USA', number: 4, type: 'WC', profile_url: 'http://mtr-design.com' }],
+      ],
+      "results": [
+        // Results from the 1/2 finals
+        [
+          [1, 2, undefined, undefined, { date: null, club: "O.K. Sport - Club", club_url: 'http://mtr-design.com', info: null }],
+          [1, 2, undefined, undefined, { date: "22 Май 2015 - 18:00", club: "Club", club_url: 'http://mtr-design.com', info: "Корт 2" }],
+        ],
+        // Results from the finals
+        [
+          [2, 1, '6/5, 5/6, 7/6', '6/4, 3/6, 6/0', { date: "4 Юни 2015 - 16:00", club: "O.K. Sport - Club", info: "Корт 1" }],
+        ]
+      ],
+      // Winner details here
+      "winner": {
+        text: "Победител",
+        result: "7/6, 6/4",
+      },
+      // Names of the rounds
+      "roundsNames": [
+        'Полуфинал',
+        'Финал',
+      ]
+    };
+
+    initWithData(singleElimination);
+
+  };
+
   var initExample16 = function() {
 
     var singleElimination = {
@@ -338,12 +373,13 @@ var Bracket = (function() {
 
   var clear = function() {
     graphContainer.html('');
-  }
+  };
 
   return {
     init: init,
     print: print,
     clear: clear,
+    initExample4: initExample4,
     initExample16: initExample16,
     initExample128: initExample128,
   };

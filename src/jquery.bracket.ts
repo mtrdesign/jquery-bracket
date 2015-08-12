@@ -1305,7 +1305,7 @@ interface Options {
     if (opts.save)
       topCon.css('width', rounds * matchBoxWidth)
     else
-      topCon.css('width', (rounds-1) * matchBoxWidth + matchBoxWidthFirstRound - 10)
+      topCon.css('width', (rounds-1) * matchBoxWidth + matchBoxWidthFirstRound - 5)
 
     w = mkBracket(wEl, !r || !r[0] ? null : r[0], mkMatch, roundsNames)
 
