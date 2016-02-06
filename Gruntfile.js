@@ -4,8 +4,18 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     watch: {
       scripts: {
-        files: ['src/jquery.bracket.scss', 'src/jquery.bracket.ts'],
+        files: ['src/jquery.bracket.less', 'src/jquery.bracket.ts'],
         tasks: ['default']
+      }
+    },
+    less: {
+      development: {
+        options: {
+          paths: ["src/"]
+        },
+        files: {
+          "dist/jquery.bracket.css": "src/jquery.bracket.less",
+        }
       }
     },
     shell: {
@@ -41,7 +51,7 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        compress: true,
+        compress: {},
         banner: '<%= licenseString %>\n'
       },
       dist: {
@@ -61,9 +71,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-css');
 
-  grunt.registerTask('default', ['shell', 'typescript', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['less', 'typescript', 'uglify', 'cssmin']);
 };
