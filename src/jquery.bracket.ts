@@ -9,9 +9,11 @@
 
 /// <reference path="../lib/jquery.d.ts" />
 
-var matchBoxWidthFirstRound = 200
-var matchBoxWidth = 155
-var matchBoxHeight = 80
+var settings = {
+  matchBoxWidthFirstRound: 200,
+  matchBoxWidth: 155,
+  matchBoxHeight: 80
+}
 
 interface Connector {
   height: number;
@@ -226,6 +228,14 @@ interface Options {
   }
 
   function defaultRender(container: JQuery, team: string, score: any, result: any, round: any) {
+    // Make everything to be array
+    if (typeof team['name'] === 'string') {
+      team['name'] = [team['name']]
+    }
+    if (typeof team['profile_url'] === 'string') {
+      team['profile_url'] = [team['profile_url']]
+    }
+
     if (!team['name']) {
       container.append('<span class="name">&nbsp;</span>');
       return;
@@ -234,22 +244,31 @@ interface Options {
     team['type'] = team['type'] || ''
     team['country'] = team['country'] || ''
 
-    var name, maxsymbols
-    if (round === 0) {
-      maxsymbols = team['type'] ? 17 : 22
-      if (team['country'].length === 0) {
-        maxsymbols += 3
+    var name = '',
+        maxsymbols
+    // Loop through all of the player names for this team
+    team['name'].forEach(function(teamName, index) {
+      if (round === 0) {
+        maxsymbols = team['type'] ? 17 : 22
+        if (team['country'].length === 0) {
+          maxsymbols += 3
+        }
+        teamName = (teamName.length > maxsymbols) ? teamName.substring(0, maxsymbols) + '...' : teamName;
       }
-      name = (team['name'].length > maxsymbols) ? team['name'].substring(0, maxsymbols) + '...' : team['name'];  
-    }
-    else {
-      name = (team['name'].length > 23) ? team['name'].substring(0, 23) + '...' : team['name'];   
-    }
+      else {
+        teamName = (teamName.length > 23) ? teamName.substring(0, 23) + '...' : teamName;
+      }
 
-    if (team['profile_url']) {
-      name = '<a href="' + team['profile_url'] + '" target="_blank">' + name + '</a>'
-    }
-    
+      if (team['profile_url']) {
+        name += index > 0 ? '<br />' : ''
+        name += '<a href="' + team['profile_url'][index] + '" target="_blank">' + teamName + '</a>'
+      }
+      else {
+        name += index > 0 ? '<br />' : ''
+        name += teamName
+      }
+    })
+
     var nameElement = '<span class="name">'+ name +'</span>';
     if (round === 0) {
       var numberElement = '<span class="number">'+ team['number'] +'</span>';
@@ -264,15 +283,15 @@ interface Options {
       container.append(typeElement);
       container.append(countryElement);
       container.append(nameElement);
-      
+
       container.parent().addClass('first-round');
     }
     else {
-      var resultElement = result ? '<span class="result">'+ result +'</span>' : '';
+      var resultElement = result ? '<span class="result">' + result + '</span>' : '<span class="result">---</span>'
 
       container.append(nameElement);
       container.append(resultElement);
-    }    
+    }
   }
 
   // Actually we don't want the bubbles, we are changing them with a match with the winner
@@ -327,7 +346,7 @@ interface Options {
 
     var offset = parseInt(el.find('.teamContainer').css('top'));
     el.find('.teamContainer').css('top', offset + 50 + 'px');
-    
+
     return true
   }
 
@@ -503,13 +522,13 @@ interface Options {
             if (_isResized === false) {
               if (rematch) {
                 _isResized = true
-                topCon.css('width', (parseInt(topCon.css('width'), 10) + matchBoxWidth) + 'px')
+                topCon.css('width', (parseInt(topCon.css('width'), 10) + settings.matchBoxWidth) + 'px')
               }
             }
             if (!rematch && _isResized) {
               _isResized = false
               finals.dropRound()
-              topCon.css('width', (parseInt(topCon.css('width'), 10) - matchBoxWidth) + 'px')
+              topCon.css('width', (parseInt(topCon.css('width'), 10) - settings.matchBoxWidth) + 'px')
             }
             return rematch
           })
@@ -689,7 +708,7 @@ interface Options {
           roundLabel.css('bottom', 50)
           firstMatch.before(roundLabel);
         }
-        
+
       },
       results: function() {
         var results = []
@@ -855,6 +874,13 @@ interface Options {
       throw Error('Invalid decorator input')
     else if (!opts.decorator)
       opts.decorator = { edit: defaultEdit, render: defaultRender }
+
+    // Override default settings
+    if (opts.init.settings) {
+      for (var name in opts.init.settings) {
+        settings[name] = opts.init.settings[name]
+      }
+    }
 
     var data
     if (!opts.init)
@@ -1281,7 +1307,7 @@ interface Options {
       lEl = $('<div class="loserBracket"></div>').appendTo(topCon)
     }
 
-    var height = data.teams.length * matchBoxHeight
+    var height = data.teams.length * settings.matchBoxHeight
 
     wEl.css('height', height)
     wEl.parent().css('height', height)
@@ -1303,9 +1329,9 @@ interface Options {
       rounds = (Math.log(data.teams.length * 2) / Math.log(2) - 1) * 2 + 1
 
     if (opts.save)
-      topCon.css('width', rounds * matchBoxWidth)
+      topCon.css('width', rounds * settings.matchBoxWidth)
     else
-      topCon.css('width', (rounds-1) * matchBoxWidth + matchBoxWidthFirstRound - 5)
+      topCon.css('width', (rounds-1) * settings.matchBoxWidth + settings.matchBoxWidthFirstRound - 5)
 
     w = mkBracket(wEl, !r || !r[0] ? null : r[0], mkMatch, roundsNames)
 
@@ -1331,27 +1357,26 @@ interface Options {
     }
   }
 
-  var actions = function() {
+  var actions = function(el) {
 
-    $(document).on('mouseenter', '.popup-activator', function() {
+    $(document).on('mouseenter tap taphold', '.popup-activator', function(e) {
       var self = $(this);
-
-      if ($('.cloned-popup').size()) {
+      if ($('.cloned-popup').size() && e.type === 'mouseenter') {
         //$('.cloned-popup').remove();
         return;
+      }
+      else if ($('.cloned-popup').size() && e.type !== 'mouseenter') {
+        $('.cloned-popup').remove();
       }
 
       var popup = self.find('.popup .popup-info');
 
-      /*
-      var popupPosition = 'absolute',
-          popupOffsetTop = self.offset().top - $(window).scrollTop(),
-          popupOffsetLeft = self.offset().left - $(window).scrollLeft();
-      */
+      var matchElement = self.parents('.match');
+      var teamContainerElement = self.parents('.teamContainer');
 
       var popupPosition = 'absolute',
-          popupOffsetTop = self.offset().top,
-          popupOffsetLeft = self.offset().left;
+          popupOffsetTop = matchElement.offset().top - el.offset().top + teamContainerElement.get(0).offsetTop + 1,
+          popupOffsetLeft = matchElement.offset().left - el.offset().left + teamContainerElement.get(0).offsetLeft + 1 + el.scrollLeft();
 
 
       var cloned = $(self).clone();
@@ -1362,13 +1387,13 @@ interface Options {
         left: popupOffsetLeft + self.parent().width(),
         zIndex: 10000
       });
+
       cloned.find('.corner').show();
       cloned.find('.popup').show();
       cloned.find('.popup-info').show();
 
       cloned.addClass('cloned-popup');
-
-      $('body').append(cloned);
+      $(el).append(cloned);
     });
 
     $(document).on('mouseleave', '.match, .popup-activator, .popup-activator .corner, .cloned-popup .popup-info', function(e) {
@@ -1398,7 +1423,7 @@ interface Options {
       var bracket = JqueryBracket(opts)
       $(this).data('bracket', {target: that, obj: bracket})
 
-      actions()
+      actions(opts.el)
 
       return bracket
     },

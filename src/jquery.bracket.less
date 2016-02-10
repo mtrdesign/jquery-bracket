@@ -222,7 +222,7 @@ div.jQBracket {
         cursor: default;
       }
 
-      .number, 
+      .number,
       .type,
       .country {
         position: relative;
@@ -299,13 +299,13 @@ div.jQBracket {
       color: @winColorForeground;
     }
     &.win div.score {
-      
+
     }
     &.lose div.score {
-      
+
     }
     &.lose {
-      
+
     }
     &.tie div.score {
       color: blue;
@@ -347,7 +347,7 @@ div.jQBracket {
           color: @winColorForeground;
         }
       }
-    } 
+    }
 
     &:hover {
       .popup-activator .corner {
@@ -546,7 +546,7 @@ div.jQBracket.rl {
   background: @popupColor;
   margin-top: 24px;
 
-  
+
   .border-radius(@teamBoxBorderRadius);
   border: 1px solid #1983ba;
   padding: 10px 12px 12px 12px;
@@ -582,7 +582,7 @@ div.jQBracket.rl {
     position: absolute;
     top: -1px;
     right: -1px;
-    
+
     color: #ffffff;
     line-height: 20px;
     font-weight: bold;
@@ -600,11 +600,18 @@ div.jQBracket.rl {
     top: 0px;
     right: -120px;
     z-index: 10000;
+    text-align: left;
+  }
+
+  &.cloned {
+    .corner {
+      display: none !important;
+    }
   }
 }
 
 /*
- * Print styles because we don't want to lose colors 
+ * Print styles because we don't want to lose colors
  *
  * These styles are only changing the color scheme of the elements
  */
@@ -623,5 +630,17 @@ div.jQBracket.print {
         }
       }
     }
+  }
+}
+
+.bracket-holder {
+  text-align: center;
+  position: relative;
+  min-height: 260px;
+
+  .bracket-loading {
+    margin: 5px auto;
+    position: relative;
+    font-weight: bold;
   }
 }
