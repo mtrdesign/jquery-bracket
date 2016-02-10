@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>jQuery Bracket - Demo</title>
+  <title>jQuery Bracket - Demo 4 Players</title>
   <meta charset="UTF-8">
 
   <link rel="stylesheet" type="text/css" href="dist/jquery.bracket.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 <body>
 
-  <div id="tournament-graph-framebox"></div>
+  <div id="tournament-graph-framebox" class="bracket-holder"></div>
 
   <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
   <script src="dist/jquery.bracket.min.js" type="text/javascript"></script>
@@ -16,7 +17,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       Bracket.init();
-      Bracket.initExample1();
+      Bracket.initExample4();
     });
   </script>
 

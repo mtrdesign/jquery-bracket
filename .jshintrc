@@ -56,5 +56,8 @@
     "white"         : false,
     "maxerr"        : 100,
     "predef"        : [],
-    "indent"        : 2
+    "indent"        : 2,
+    "globals": {
+        "$": false
+    }
 }
