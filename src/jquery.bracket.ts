@@ -1178,7 +1178,7 @@ interface Options {
 
           // Add popup elements
           if (match.popupDetails) {
-            var popupActivatorElement = $('<div class="popup-activator"><div class="corner">+</div></div>')
+            var popupActivatorElement = $('<div class="jb-popup-activator"><div class="corner">+</div></div>')
 
             var popupDate = match.popupDetails.date || ''
             var popupClub = match.popupDetails.club || ''
@@ -1359,7 +1359,7 @@ interface Options {
 
   var actions = function(el) {
 
-    $(document).on('mouseenter tap taphold', '.popup-activator', function(e) {
+    $(document).on('mouseenter tap taphold', '.jb-popup-activator', function(e) {
       var self = $(this);
       if ($('.cloned-popup').size() && e.type === 'mouseenter') {
         //$('.cloned-popup').remove();
@@ -1396,9 +1396,9 @@ interface Options {
       $(el).append(cloned);
     });
 
-    $(document).on('mouseleave', '.match, .popup-activator, .popup-activator .corner, .cloned-popup .popup-info', function(e) {
+    $(document).on('mouseleave', '.match, .jb-popup-activator, .jb-popup-activator .corner, .cloned-popup .popup-info', function(e) {
       var self = $(this);
-      var popup = self.parents('.popup-activator');
+      var popup = self.parents('.jb-popup-activator');
 
       if ($(e.target).hasClass('corner')) {
         return;
