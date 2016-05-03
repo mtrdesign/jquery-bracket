@@ -302,7 +302,7 @@ interface Options {
     // var loser = el.find('.team.lose')
     // loser.append('<div class="bubble">2nd</div>')
 
-    var winnerName = winner.find('.name').text(),
+    var winnerName = winner.find('.name').html(),
         winnerResult = match.finalResults.result;
 
     var matchResultElement = $('<div class="match">' +
